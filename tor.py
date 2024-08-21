@@ -57,15 +57,6 @@ proxy = {
 }
 
 try:
-    session = requests.Session()
-    session.proxies.update(proxy)
-    response = session.get(url)
-    if response.status_code == 200:
-        try:
-            ip = response.json().get('origin')
-            print(f"[✔] IP Changed -> {ip}")
-        except ValueError:
-            print("[X] Failed to parse JSON response.")
     while True:
         session = requests.Session()
         session.proxies.update(proxy)
@@ -74,18 +65,20 @@ try:
             try:
                 ip = response.json().get('origin')
                 print(f"[✔] socks5://127.0.0.1:9050 || IP Changed -> {ip}")
+                if delay != float(0):
+                    time.sleep(float(delay))
+                    close_tor()
+                    subprocess.Popen(tor_path, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             except ValueError:
                 print("[X] Failed to parse JSON response.")
         else:
             print(f"[X] Received unexpected status code {response.status_code}")
         
-        if delay != float(0):
-            time.sleep(float(delay))
-            close_tor()
-            subprocess.Popen(tor_path, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
 except requests.exceptions.ConnectionError as error:
     print(f"[X] {error}")
 except KeyboardInterrupt:
     close_tor()
 except Exception as Error:
     print(Error)
+    close_tor()
