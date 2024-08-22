@@ -1,3 +1,7 @@
+# Sigma Proxy v1
+# Created by AK
+# Date: 08/21/24
+
 import requests
 import os
 import time
@@ -9,16 +13,16 @@ tor_path = "Browser\\TorBrowser\\Tor\\tor.exe"
 torrc = "Browser\\TorBrowser\\Data\\torrc"
 
 print(colorama.Fore.LIGHTGREEN_EX+'''
-
-  .-')                        _   .-')      ('-.                      _ (`-.                   ('-. .-.   ('-.         .-') _               ('-.  _  .-')   
- ( OO ).                     ( '.( OO )_   ( OO ).-.                 ( (OO  )                 ( OO )  /  ( OO ).-.    ( OO ) )            _(  OO)( \( -O )  
-(_)---\_)  ,-.-')   ,----.    ,--.   ,--.) / . --. /        ,-.-')  _.`     \         .-----. ,--. ,--.  / . --. /,--./ ,--,'  ,----.    (,------.,------.  
-/    _ |   |  |OO) '  .-./-') |   `.'   |  | \-.  \         |  |OO)(__...--''        '  .--./ |  | |  |  | \-.  \ |   \ |  |\ '  .-./-')  |  .---'|   /`. ' 
-\  :` `.   |  |  \ |  |_( O- )|         |.-'-'  |  |        |  |  \ |  /  | |        |  |('-. |   .|  |.-'-'  |  ||    \|  | )|  |_( O- ) |  |    |  /  | | 
- '..`''.)  |  |(_/ |  | .--, \|  |'.'|  | \| |_.'  |        |  |(_/ |  |_.' |       /_) |OO  )|       | \| |_.'  ||  .     |/ |  | .--, \(|  '--. |  |_.' | 
-.-._)   \ ,|  |_.'(|  | '. (_/|  |   |  |  |  .-.  |       ,|  |_.' |  .___.'       ||  |`-'| |  .-.  |  |  .-.  ||  |\    | (|  | '. (_/ |  .--' |  .  '.' 
-\       /(_|  |    |  '--'  | |  |   |  |  |  | |  |      (_|  |    |  |           (_'  '--'\ |  | |  |  |  | |  ||  | \   |  |  '--'  |  |  `---.|  |\  \  
- `-----'   `--'     `------'  `--'   `--'  `--' `--'        `--'    `--'              `-----' `--' `--'  `--' `--'`--'  `--'   `------'   `------'`--' '--' 
+      
+  ██████   ██▓ ▄████  ███▄ ▄███▓ ▄▄▄          ██▓███   ██▀███   ▒█████  ▒██   ██▒▓██   ██▓
+▒██    ▒ ▒▓██▒ ██▒ ▀█▓██▒▀█▀ ██▒▒████▄       ▓██░  ██ ▓██ ▒ ██▒▒██▒  ██▒▒▒ █ █ ▒░ ▒██  ██▒
+░ ▓██▄   ▒▒██▒▒██░▄▄▄▓██    ▓██░▒██  ▀█▄     ▓██░ ██▓▒▓██ ░▄█ ▒▒██░  ██▒░░  █   ░  ▒██ ██░
+  ▒   ██▒░░██░░▓█  ██▒██    ▒██ ░██▄▄▄▄██    ▒██▄█▓▒ ▒▒██▀▀█▄  ▒██   ██░ ░ █ █ ▒   ░ ▐██▓░
+▒██████▒▒░░██░▒▓███▀▒▒██▒   ░██▒▒▓█   ▓██    ▒██▒ ░  ░░██▓ ▒██▒░ ████▓▒░▒██▒ ▒██▒  ░ ██▒▓░
+▒ ▒▓▒ ▒ ░ ░▓  ░▒   ▒ ░ ▒░   ░  ░░▒▒   ▓▒█    ▒▓▒░ ░  ░░ ▒▓ ░▒▓░░ ▒░▒░▒░ ▒▒ ░ ░▓ ░   ██▒▒▒ 
+░ ░▒  ░  ░ ▒ ░ ░   ░ ░  ░      ░░ ░   ▒▒     ░▒ ░       ░▒ ░ ▒   ░ ▒ ▒░ ░░   ░▒ ░ ▓██ ░▒░ 
+░  ░  ░  ░ ▒ ░ ░   ░ ░      ░     ░   ▒      ░░         ░░   ░ ░ ░ ░ ▒   ░    ░   ▒ ▒ ░░  
+      ░    ░       ░        ░         ░                  ░         ░ ░   ░    ░   ░ ░     
 
 Created by AK
 
@@ -30,7 +34,7 @@ Keep your internet activity hidden with this simple IP masker.
 Open Mozilla Firefox and set your proxy to SOCKS5, IP: 127.0.0.1, PORT: 9050.
 ''')
 
-delay = input("Enter seconds between IP rotation (0 for no rotation): ")
+delay = 30 # time between ip rotation
 delay = float(delay)
 subprocess.Popen(tor_path, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
@@ -44,13 +48,13 @@ version_info = os.popen(f"{tor_path} --version").read().strip()
 version = version_info.split('\n')[0].split(' ')[2]
 print(f"[-] Current Tor Version: {version}")
 
-response = requests.get("https://httpbin.org/ip")
-ip = response.json().get('origin')
+response = requests.get("https://api.myip.com")
+ip = response.json().get('ip')
 print(f"[-] Your IP: {ip}")
 
 time.sleep(10)
 
-url = "https://httpbin.org/ip"
+url = "https://api.myip.com"
 proxy = {
     'http': 'socks5://127.0.0.1:9050',
     'https': 'socks5://127.0.0.1:9050'
@@ -63,8 +67,8 @@ try:
         response = session.get(url)
         if response.status_code == 200:
             try:
-                ip = response.json().get('origin')
-                print(f"[✔] socks5://127.0.0.1:9050 || IP Changed -> {ip}")
+                ip = response.json().get('ip')
+                print(f"[✔] socks5://127.0.0.1:9050 || IP Changed {ip}")
                 if delay != float(0):
                     time.sleep(float(delay))
                     close_tor()
@@ -77,6 +81,7 @@ try:
         
 except requests.exceptions.ConnectionError as error:
     print(f"[X] {error}")
+    #os.system('python tor.py')
 except KeyboardInterrupt:
     close_tor()
 except Exception as Error:
