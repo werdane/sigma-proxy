@@ -34,6 +34,7 @@ Keep your internet activity hidden with this simple IP masker.
 Open Mozilla Firefox and set your proxy to SOCKS5, IP: 127.0.0.1, PORT: 9050.
 ''')
 
+rotate = input("Want to rotate your proxies, this can improve operational security? (Y/n)")
 delay = 30 # time between ip rotation
 delay = float(delay)
 subprocess.Popen(tor_path, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -69,7 +70,7 @@ try:
             try:
                 ip = response.json().get('ip')
                 print(f"[✔] socks5://127.0.0.1:9050 || IP Changed {ip}")
-                if delay != float(0):
+                if delay != float(0) and rotate.lower() != 'n':
                     time.sleep(float(delay))
                     close_tor()
                     subprocess.Popen(tor_path, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -81,7 +82,7 @@ try:
         
 except requests.exceptions.ConnectionError as error:
     print(f"[X] {error}")
-    #os.system('python tor.py')
+    input("You are still connected via the Tor network but rotation might not be functioning properly.")
 except KeyboardInterrupt:
     close_tor()
 except Exception as Error:
