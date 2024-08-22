@@ -82,7 +82,9 @@ try:
         
 except requests.exceptions.ConnectionError as error:
     print(f"[X] {error}")
-    input("You are still connected via the Tor network but rotation might not be functioning properly.")
+    input("You are still connected via the Tor network but rotation might not be functioning properly, press enter to quit everything...")
+      close_tor()
+      exit()
 except KeyboardInterrupt:
     close_tor()
 except Exception as Error:
