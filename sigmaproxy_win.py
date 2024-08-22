@@ -7,7 +7,7 @@ import os
 import time
 import subprocess
 import psutil
-import colorama 
+import colorama, fake_useragent
 
 tor_path = "Browser\\TorBrowser\\Tor\\tor.exe"
 torrc = "Browser\\TorBrowser\\Data\\torrc"
@@ -65,6 +65,7 @@ try:
     while True:
         session = requests.Session()
         session.proxies.update(proxy)
+        session.headers.update({"User-Agent": fake_useragent.UserAgent().random})
         response = session.get(url)
         if response.status_code == 200:
             try:
@@ -82,12 +83,9 @@ try:
         
 except requests.exceptions.ConnectionError as error:
     print(f"[X] {error}")
-    input("You are still connected via the Tor network but rotation might not be functioning properly, press enter to quit everything...")
-      close_tor()
-      exit()
+    input("You are still connected via the Tor network but rotation might not be functioning properly.")
 except KeyboardInterrupt:
     close_tor()
 except Exception as Error:
     print(Error)
     close_tor()
-    exit()
