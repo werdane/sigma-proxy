@@ -90,3 +90,4 @@ except KeyboardInterrupt:
 except Exception as Error:
     print(Error)
     close_tor()
+    exit()
