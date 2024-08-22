@@ -59,7 +59,24 @@ proxy = {
 }
 
 try:
-    while True:
+    if rotate.lower() != "n':
+          while True:
+              session = requests.Session()
+              session.proxies.update(proxy)
+              session.headers.update({"User-Agent": fake_useragent.UserAgent().random})
+              response = session.get(url)
+              if response.status_code == 200:
+                  try:
+                      ip = response.json().get('ip')
+                      print(f"[✔] socks5://127.0.0.1:9050 || IP Changed {ip}")
+                      if delay != float(0) and rotate.lower() != 'n':
+                          time.sleep(float(delay))
+                          subprocess.Popen("service tor reload", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                  except ValueError:
+                      print("[X] Failed to parse JSON response.")
+              else:
+                  print(f"[X] Received unexpected status code {response.status_code}")
+    else:
         session = requests.Session()
         session.proxies.update(proxy)
         session.headers.update({"User-Agent": fake_useragent.UserAgent().random})
@@ -68,14 +85,13 @@ try:
             try:
                 ip = response.json().get('ip')
                 print(f"[✔] socks5://127.0.0.1:9050 || IP Changed {ip}")
-                if delay != float(0) and rotate.lower() != 'n':
-                    time.sleep(float(delay))
-                    subprocess.Popen("service tor reload", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                input("Press Enter to continue...")
+                subprocess.Popen("service tor stop", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                exit()
             except ValueError:
                 print("[X] Failed to parse JSON response.")
-        else:
-            print(f"[X] Received unexpected status code {response.status_code}")
-        
+                subprocess.Popen("service tor stop", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                exit()
         
 except requests.exceptions.ConnectionError as error:
     print(f"[X] {error}")
