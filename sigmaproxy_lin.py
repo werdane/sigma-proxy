@@ -7,7 +7,7 @@ import os
 import time
 import subprocess
 import psutil
-import colorama 
+import colorama, fake_useragent
 
 
 print(colorama.Fore.LIGHTGREEN_EX+'''
@@ -62,6 +62,7 @@ try:
     while True:
         session = requests.Session()
         session.proxies.update(proxy)
+        session.headers.update({"User-Agent": fake_useragent.UserAgent().random})
         response = session.get(url)
         if response.status_code == 200:
             try:
