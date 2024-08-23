@@ -25,7 +25,7 @@ print(colorama.Fore.LIGHTGREEN_EX+'''
 Created by AK
 
 [*] Ip Rotation
-[*] Windows Support only
+[*] Windows & Linux Support only
 [*] Utilizes Tor relays as proxies
 
 Keep your internet activity hidden with this simple IP masker.
@@ -61,13 +61,13 @@ proxy = {
 try:
     if rotate.lower() != "n':
           while True:
-              session = requests.Session()
-              session.proxies.update(proxy)
-              session.headers.update({"User-Agent": fake_useragent.UserAgent().random})
-              response = session.get(url)
-              if response.status_code == 200:
+              #session = requests.Session()
+              #session.proxies.update(proxy)
+              #session.headers.update({"User-Agent": fake_useragent.UserAgent().random})
+              #response = session.get(url)
+              if 200 == 200:
                   try:
-                      ip = response.json().get('ip')
+                      #ip = response.json().get('ip')
                       print(f"[✔] socks5://127.0.0.1:9050 || IP Changed {ip}")
                       if delay != float(0) and rotate.lower() != 'n':
                           time.sleep(float(delay))
@@ -75,7 +75,8 @@ try:
                   except ValueError:
                       print("[X] Failed to parse JSON response.")
               else:
-                  print(f"[X] Received unexpected status code {response.status_code}")
+                  pass
+                  #print(f"[X] Received unexpected status code {response.status_code}")
     else:
         session = requests.Session()
         session.proxies.update(proxy)
